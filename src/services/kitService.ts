@@ -1,7 +1,10 @@
 import { Kit } from "@/interfaces/kit";
 import { KitFilter } from "@/interfaces/kit";
+import { sortByLabelId } from "@/utils/api";
 
-const kits: Kit[] = require("../../data/KITS_SHIPPING_DATA");
+const kits: Kit[] = require("../../data/KITS_SHIPPING_DATA").sort(
+  sortByLabelId
+);
 
 export function findAllKits(options: KitFilter) {
   const filteredKits = kits.filter((kit) => {

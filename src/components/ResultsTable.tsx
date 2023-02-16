@@ -9,7 +9,6 @@ export default function ResultsTable({ searchResults }: Props) {
     <table className="w-full md:w-[500px] text-sm">
       <thead>
         <tr className="font-semibold text-sm capitalize">
-          <td className="bg-zinc-100 p-3">#</td>
           <td className="bg-zinc-100 p-3">
             label <span className="uppercase">id</span>
           </td>
@@ -22,7 +21,6 @@ export default function ResultsTable({ searchResults }: Props) {
             key={kit.id}
             className="border-b border-opacity-20 border-zinc-300 bg-zinc-50/25"
           >
-            <td className="p-3">{kit.id}</td>
             <td className="p-3">{kit.label_id}</td>
             <td className="p-3">
               <a
