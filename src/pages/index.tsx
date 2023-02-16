@@ -1,12 +1,24 @@
 import Head from "next/head";
 import { useState } from "react";
 import SearchField from "@/components/SearchField";
+import { KitResponse } from "@/interfaces/kit";
+import ResultsTable from "@/components/ResultsTable";
 
 export default function Home() {
   const [searchValue, setSearchValue] = useState("");
-  const onSearch = () => {
-    console.log("search for", searchValue);
-    setSearchValue("");
+  const [searchResults, setSearchResults] = useState<KitResponse | null>(null);
+
+  const searchParams = new URLSearchParams({ limit: "10", offset: "0" });
+  const onSearch = async () => {
+    searchParams.set("labelId", searchValue);
+
+    try {
+      const response = await fetch(`/api/kits?${searchParams.toString()}`);
+      const responseJson = (await response.json()) as KitResponse;
+      setSearchResults(responseJson);
+    } catch (e) {
+      console.error("Error fetching kit search results", e);
+    }
   };
 
   return (
@@ -33,7 +45,13 @@ export default function Home() {
             setSearchValue={setSearchValue}
           />
         </form>
-        <div>other stuff</div>
+        {searchResults?.kits.length ? (
+          <ResultsTable searchResults={searchResults} />
+        ) : searchResults === null ? (
+          <div>Use the search bar above to lookup the status of your kit.</div>
+        ) : (
+          <div>No results found.</div>
+        )}
       </main>
     </>
   );
