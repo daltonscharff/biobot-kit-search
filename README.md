@@ -27,3 +27,8 @@ Given more time, I'd implement the following features:
 - Load KITS_SHIPPING_DATA.json into a sqlite table and index on the label_id column to improve read time as the application grows
 - Match page design to similar Biobot pages to user has a familiar experience
 - Utilize a FedEx API to display the package delivery status
+
+## Assumptions
+
+- The ID from KITS_SHIPPING_DATA.json is not relevant to the user so it is not displayed in the ResultsTable
+- All tracking IDs are FedEx tracking numbers
