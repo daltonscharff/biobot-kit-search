@@ -1,13 +1,14 @@
-import { Kit } from "@/interfaces/kit";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { findAllKits } from "@/services/kitService";
 import { HttpError } from "@/interfaces/httpError";
+import { defaultKitFilter, KitResponse } from "@/interfaces/kit";
+import { parseIntegerFromQueryParam } from "@/utils/api";
 
 const MAX_LIMIT = 25;
 
 export default function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Kit[] | HttpError>
+  res: NextApiResponse<KitResponse | HttpError>
 ) {
   const { labelId, limit, offset } = req.query;
   const labelIdString = Array.isArray(labelId) ? labelId[0] : labelId;
@@ -28,14 +29,9 @@ export default function handler(
   if (limitNumber && limitNumber > MAX_LIMIT) limitNumber = MAX_LIMIT;
 
   const kits = findAllKits({
-    labelId: labelIdString,
-    limit: limitNumber,
-    offset: offsetNumber,
+    labelId: labelIdString ?? defaultKitFilter.labelId,
+    limit: limitNumber ?? defaultKitFilter.limit,
+    offset: offsetNumber ?? defaultKitFilter.offset,
   });
   res.status(200).json(kits);
-}
-
-function parseIntegerFromQueryParam(value: string | string[] | undefined) {
-  if (value === undefined) return undefined;
-  return parseInt(Array.isArray(value) ? value[0] : value);
 }
