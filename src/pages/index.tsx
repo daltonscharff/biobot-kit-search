@@ -32,8 +32,8 @@ export default function Home() {
           href="https://biobot.io/wp-content/uploads/2021/08/cropped-favicon-1-32x32.png"
         />
       </Head>
-      <main className="flex items-center flex-col p-2 pt-3 md:p-5 gap-4">
-        <h1 className="text-3xl font-bold">Biobot Kit Search</h1>
+      <main className="flex items-center flex-col p-2 pt-3 md:p-5 gap-4 min-w-80">
+        <h1 className="text-3xl font-bold text-center">Biobot Kit Search</h1>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -47,10 +47,12 @@ export default function Home() {
         </form>
         {searchResults?.kits.length ? (
           <ResultsTable searchResults={searchResults} />
-        ) : searchResults === null ? (
-          <div>Use the search bar above to lookup the status of your kit.</div>
         ) : (
-          <div>No results found.</div>
+          <div className="text-center">
+            {searchResults === null
+              ? "Use the search bar above to lookup the status of your kit."
+              : "No results found."}
+          </div>
         )}
       </main>
     </>
