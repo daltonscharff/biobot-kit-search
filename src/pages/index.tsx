@@ -32,7 +32,7 @@ export default function Home() {
           href="https://biobot.io/wp-content/uploads/2021/08/cropped-favicon-1-32x32.png"
         />
       </Head>
-      <main className="flex items-center flex-col p-2 md:p-4 gap-4">
+      <main className="flex items-center flex-col p-2 pt-3 md:p-5 gap-4">
         <h1 className="text-3xl font-bold">Biobot Kit Search</h1>
         <form
           onSubmit={(e) => {
