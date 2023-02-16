@@ -26,6 +26,7 @@ export default function ResultsTable({ searchResults }: Props) {
               <a
                 target="_blank"
                 href={`https://www.fedex.com/fedextrack?trknbr=${kit.shipping_tracking_code}`}
+                rel="noreferrer"
                 className="text-blue-500 hover:underline"
               >
                 {kit.shipping_tracking_code}
