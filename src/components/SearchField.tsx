@@ -1,6 +1,6 @@
 import { Kit, KitResponse } from "@/interfaces/kit";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 type Props = {
   searchValue: string;
@@ -14,18 +14,31 @@ export default function SearchField({ searchValue, setSearchValue }: Props) {
   const autocompleteSearchParams = new URLSearchParams({
     limit: "5",
   });
+  const throttleSearch = useRef(false);
 
   const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
-    if (e.target.value.length < 1) return;
+    if (e.target.value.length < 1 || throttleSearch.current) return;
 
-    autocompleteSearchParams.set("labelId", e.target.value);
-    const suggestionResponse = await fetch(
-      `/api/kits?${autocompleteSearchParams.toString()}`
-    );
-    const suggestionJson = (await suggestionResponse.json()) as KitResponse;
-    const suggestedLabelIds = suggestionJson.kits.map((kit) => kit.label_id);
-    setAutocompleteSuggestions(suggestedLabelIds);
+    throttleSearch.current = true;
+
+    setTimeout(async () => {
+      throttleSearch.current = false;
+      autocompleteSearchParams.set("labelId", e.target.value);
+
+      try {
+        const suggestionResponse = await fetch(
+          `/api/kits?${autocompleteSearchParams.toString()}`
+        );
+        const suggestionJson = (await suggestionResponse.json()) as KitResponse;
+        const suggestedLabelIds = suggestionJson.kits.map(
+          (kit) => kit.label_id
+        );
+        setAutocompleteSuggestions(suggestedLabelIds);
+      } catch (e) {
+        console.error("Error fetching autocomplete suggestions", e);
+      }
+    }, 500);
   };
 
   useEffect(() => {
